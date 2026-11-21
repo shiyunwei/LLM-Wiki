@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>當科技學會了溫柔：人機互動（HCI）論文教學簡報庫</title>
+  <style>
+    :root {
+      --bg-cream: #FDFBF7;
+      --card-bg: #FFFFFF;
+      --border-soft: #EFE9DE;
+      --primary-peach: #E07A5F;
+      --primary-hover: #D0694E;
+      --accent-sage: #81B29A;
+      --accent-yellow: #F4D35E;
+      --accent-sand: #F7EDE2;
+      --accent-blue: #A8DADC;
+      --text-main: #3D405B;
+      --text-muted: #7E8299;
+      --shadow-soft: 0 10px 30px -5px rgba(61, 64, 91, 0.08), 0 4px 12px -2px rgba(61, 64, 91, 0.04);
+      --shadow-hover: 0 20px 35px -5px rgba(61, 64, 91, 0.12), 0 8px 16px -2px rgba(61, 64, 91, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1080px;
+    }
+
+    header.hero-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-sand);
+      color: var(--primary-peach);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    h1.hero-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.35;
+      margin-bottom: 14px;
+    }
+
+    p.hero-desc {
+      font-size: 16.5px;
+      color: var(--text-muted);
+      max-width: 760px;
+      margin: 0 auto 24px;
+      line-height: 1.65;
+    }
+
+    .stats-bar {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-soft);
+      padding: 10px 28px;
+      border-radius: 40px;
+      box-shadow: var(--shadow-soft);
+      font-size: 14px;
+      color: #555974;
+    }
+
+    .stat-item strong {
+      color: var(--primary-peach);
+      font-weight: 800;
+    }
+
+    .deck-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 26px;
+      margin-top: 24px;
+    }
+
+    .deck-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-soft);
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .deck-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(224, 122, 95, 0.4);
+    }
+
+    .card-top {
+      margin-bottom: 18px;
+    }
+
+    .paper-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      font-size: 22px;
+      margin-bottom: 14px;
+      background: var(--accent-sand);
+    }
+
+    .pill-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(129, 178, 154, 0.15);
+      color: #2F6F55;
+    }
+
+    .pill.venue {
+      background: rgba(224, 122, 95, 0.15);
+      color: var(--primary-peach);
+    }
+
+    h2.card-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    p.card-en-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    p.card-summary {
+      font-size: 14px;
+      color: #555974;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .card-bottom {
+      border-top: 1px dashed var(--border-soft);
+      padding-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-badge {
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #2F6F55;
+    }
+
+    a.open-deck-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-peach);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 9px 18px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
+
+    a.open-deck-btn:hover {
+      background: var(--primary-hover);
+      transform: scale(1.04);
+    }
+
+    footer.page-footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    footer.page-footer a {
+      color: var(--primary-peach);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    footer.page-footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* 總整理簡報橫幅 */
+    .synthesis-banner {
+      background: linear-gradient(135deg, #FFFFFF, #FAF7F0);
+      border: 2px solid var(--accent-sage);
+      border-radius: 28px;
+      padding: 28px 34px;
+      margin-top: 30px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      transition: all 0.25s ease;
+    }
+    .synthesis-banner:hover {
+      border-color: var(--primary-peach);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+    .synthesis-content {
+      flex: 1;
+    }
+    .synthesis-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(129, 178, 154, 0.15);
+      color: #2D6A4F;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+    }
+    .synthesis-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .synthesis-desc {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .synthesis-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-peach);
+      color: #FFF;
+      text-decoration: none;
+      padding: 14px 26px;
+      border-radius: 24px;
+      font-weight: 800;
+      font-size: 15px;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(224, 122, 95, 0.25);
+      transition: all 0.2s ease;
+    }
+    .synthesis-btn:hover {
+      background: var(--primary-hover);
+      transform: scale(1.03);
+    }
+    @media (max-width: 768px) {
+      .synthesis-banner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .synthesis-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <header class="hero-section">
+      <div class="hero-badge">
+        <span>🌱</span>
+        <span>LLM Wiki 知識庫 · 人機互動教學簡報庫</span>
+      </div>
+      <h1 class="hero-title">當科技學會了溫柔 ☕<br><span style="color: var(--primary-peach);">人機互動（HCI）精選論文互動簡報集</span></h1>
+      <p class="hero-desc">
+        本知識庫收錄 5 篇涵蓋「環境感知、平靜互動、在地安老、代際情感與生理狀態監測」的頂尖人機互動論文，針對每篇文獻各自打造專屬的故事化教學簡報。所有內容皆 100% 引自 Wiki 知識庫，讓零基礎的初學者也能輕鬆理解前沿研究背後的人文關懷。
+      </p>
+
+      <div class="stats-bar">
+        <span class="stat-item">📚 核心文獻：<strong>5 篇精選論文</strong></span>
+        <span class="stat-item">💡 沉澱概念：<strong>6 項跨論文機制</strong></span>
+        <span class="stat-item">🎯 核心維度：<strong>環境感知 · 認知監測 · 在地安老</strong></span>
+      </div>
+    </header>
+
+    <!-- 主題教學簡報（旗艦作品）入口 -->
+    <section class="synthesis-banner">
+      <div class="synthesis-content">
+        <div class="synthesis-badge">
+          <span>🌿</span>
+          <span>主題教學簡報 · 旗艦導讀特刊</span>
+        </div>
+        <h2 class="synthesis-title">不打擾的溫柔：走進「平靜科技」與同理心人機互動</h2>
+        <p class="synthesis-desc">
+          從「客廳生活日記」到「候診室無聲學習」，再到「初顯期成人的五感共在」與「座艙生理自適應守護」。這是一趟專為初學者設計的故事化人機互動教學旅程，完整領會平靜科技的同理心與溫暖陪伴！
+        </p>
+      </div>
+      <div>
+        <a href="00-synthesis-overview.html" class="synthesis-btn">開啟主題教學簡報 ➔</a>
+      </div>
+    </section>
+
+    <div class="deck-grid">
+
+      <!-- 論文 1 -->
+      <article class="deck-card">
+        <div class="card-top">
+          <div class="paper-num">🏡</div>
+          <div class="pill-group">
+            <span class="pill venue">AmI 2008</span>
+            <span class="pill">在地安老</span>
+            <span class="pill">周邊感知</span>
+          </div>
+          <h2 class="card-title">爸爸今天好嗎？用生活敘事日記代替冰冷查勤</h2>
+          <p class="card-en-title">Daily Activities Diarist: Supporting Aging in Place with semantically enriched narratives</p>
+          <p class="card-summary">
+            長者害怕打電話像「被查勤」，子女又焦慮不知長輩安危？看這款能把感測器數據化為「溫暖生活日記」的電子海報，如何用「身體距離」作為互動維度維持平靜關懷。
+          </p>
+        </div>
+        <div class="card-bottom">
+          <span class="status-badge">✨ 完整導讀</span>
+          <a href="01-metaxas-2008-daily-activities-diarist.html" class="open-deck-btn">點擊開啟簡報 ↗</a>
+        </div>
+      </article>
+
+      <!-- 論文 2 -->
+      <article class="deck-card">
+        <div class="card-top">
+          <div class="paper-num">🌿</div>
+          <div class="pill-group">
+            <span class="pill venue">Comp & Edu 2014</span>
+            <span class="pill">環境顯示器</span>
+            <span class="pill">遊戲化學習</span>
+          </div>
+          <h2 class="card-title">候診室裡的無聲老師：如何不打擾你、又教會你急救？</h2>
+          <p class="card-en-title">Lead me gently: Facilitating knowledge gain through attention-aware ambient learning displays</p>
+          <p class="card-summary">
+            螢幕太吵會打擾人，太安靜又沒人看？荷蘭團隊利用人臉辨識感測與「12 級遊戲化成就」，在等待期間溫柔引導專注，使急救知識吸收率倍增！
+          </p>
+        </div>
+        <div class="card-bottom">
+          <span class="status-badge">✨ 完整導讀</span>
+          <a href="02-borner-2014-attention-aware-ambient-displays.html" class="open-deck-btn">點擊開啟簡報 ↗</a>
+        </div>
+      </article>
+
+      <!-- 論文 3 -->
+      <article class="deck-card">
+        <div class="card-top">
+          <div class="paper-num">☕</div>
+          <div class="pill-group">
+            <span class="pill venue">JMIR 2018</span>
+            <span class="pill">親友照護</span>
+            <span class="pill">使用者研究</span>
+          </div>
+          <h2 class="card-title">聽聽長輩的真心話：別讓智慧科技取代了泡茶的溫度</h2>
+          <p class="card-en-title">User Requirements for Technology to Assist Aging in Place: Qualitative Study of Older People</p>
+          <p class="card-summary">
+            深度訪談 41 位獨居長者與親友！長輩最害怕的不是學不會科技，而是「裝了機器，你們就不來陪我泡茶了」。提煉 15 項尊嚴與自主的設計黃金準則。
+          </p>
+        </div>
+        <div class="card-bottom">
+          <span class="status-badge">✨ 完整導讀</span>
+          <a href="03-elers-2018-user-requirements-aging-in-place.html" class="open-deck-btn">點擊開啟簡報 ↗</a>
+        </div>
+      </article>
+
+      <!-- 論文 4 -->
+      <article class="deck-card">
+        <div class="card-top">
+          <div class="paper-num">🧸</div>
+          <div class="pill-group">
+            <span class="pill venue">ACM CHI 2023</span>
+            <span class="pill">五感相聚學</span>
+            <span class="pill">被動共在感</span>
+          </div>
+          <h2 class="card-title">就算分開，我也在身邊：初顯期成人的「五感」被動相聚學</h2>
+          <p class="card-en-title">Sensing Their Presence: How Emerging Adults And Their Parents Connect After Moving Apart</p>
+          <p class="card-summary">
+            第一次搬出去住，訊息已讀不回很內疚、回了又怕被查勤？走進 16 對親子的生活，看「廚房香氣、踩樹葉音景與舊餐椅」如何像音樂混音般療癒心靈。
+          </p>
+        </div>
+        <div class="card-bottom">
+          <span class="status-badge">✨ 完整導讀</span>
+          <a href="04-shakeri-2023-sensing-their-presence.html" class="open-deck-btn">點擊開啟簡報 ↗</a>
+        </div>
+      </article>
+
+      <!-- 論文 5 (Frontiers 2026) -->
+      <article class="deck-card">
+        <div class="card-top">
+          <div class="paper-num">🧠</div>
+          <div class="pill-group">
+            <span class="pill venue">Frontiers 2026</span>
+            <span class="pill">神經人因</span>
+            <span class="pill">EEG + 眼動儀</span>
+          </div>
+          <h2 class="card-title">看透疲勞的大腦與眼睛：結合腦電圖與眼動的高危險守護者</h2>
+          <p class="card-en-title">Combining EEG and eye-tracking for cognitive and physiological states monitoring</p>
+          <p class="card-summary">
+            飛行員疲勞了？駕駛心智過載了？彙整 47 篇頂級實證研究，證明「腦波直接測內部認知、眼動儀捕捉外部注意力」，多模態融合讓自適應智慧座艙精準護航。
+          </p>
+        </div>
+        <div class="card-bottom">
+          <span class="status-badge">✨ 完整導讀</span>
+          <a href="06-rivasvidal-2026-eeg-eyetracking-monitoring.html" class="open-deck-btn">點擊開啟簡報 ↗</a>
+        </div>
+      </article>
+
+    </div>
+
+    <footer class="page-footer">
+      <p>
+        🔗 返回知識庫核心文件：
+        <a href="../index.md">全局內容索引 (index.md)</a> · 
+        <a href="../AGENT.md">維護者規範 (AGENT.md)</a> · 
+        <a href="../log.md">操作日誌 (log.md)</a>
+      </p>
+      <p style="margin-top: 6px; font-size: 13px;">
+        HCI Research Paper LLM Wiki · 專為初學者打造的次世代人機互動導讀集
+      </p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

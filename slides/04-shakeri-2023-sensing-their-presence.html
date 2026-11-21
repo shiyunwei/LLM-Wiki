@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>就算分開，我也在身邊：初顯期成人與父母的「五感」被動相聚學 (CHI 2023)</title>
+  <style>
+    :root {
+      --bg-cream: #FDFBF7;
+      --card-bg: #FFFFFF;
+      --border-soft: #EFE9DE;
+      --primary-peach: #E07A5F;
+      --primary-hover: #D0694E;
+      --accent-sage: #81B29A;
+      --accent-yellow: #F4D35E;
+      --accent-sand: #F7EDE2;
+      --accent-blue: #A8DADC;
+      --text-main: #3D405B;
+      --text-muted: #7E8299;
+      --shadow-soft: 0 10px 30px -5px rgba(61, 64, 91, 0.08), 0 4px 12px -2px rgba(61, 64, 91, 0.04);
+      --shadow-hover: 0 20px 35px -5px rgba(61, 64, 91, 0.12), 0 8px 16px -2px rgba(61, 64, 91, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* 頂部進度條 */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: rgba(224, 122, 95, 0.15);
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 9%;
+      background: linear-gradient(90deg, var(--accent-sage), var(--primary-peach));
+      transition: width 0.35s ease;
+      border-radius: 0 3px 3px 0;
+    }
+
+    /* 簡報外框 */
+    .deck-wrapper { width: 100%; max-width: 980px; height: 680px; background: var(--card-bg); border: 2px solid var(--border-soft); border-radius: 32px; box-shadow: var(--shadow-soft); padding: 36px 48px; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+
+    /* 頂部中介資訊 */
+    .deck-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: var(--text-muted);
+      border-bottom: 1px dashed var(--border-soft);
+      padding-bottom: 12px;
+    }
+
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-sand);
+      color: var(--primary-peach);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .slide-counter {
+      font-weight: 700;
+      color: var(--accent-sage);
+      background: rgba(129, 178, 154, 0.12);
+      padding: 4px 12px;
+      border-radius: 14px;
+    }
+
+    /* 投影片主內容 */
+    .slide-content { display: none; opacity: 0; transform: translateY(6px); transition: opacity 0.25s ease, transform 0.25s ease; flex-grow: 1; overflow-y: auto; padding-right: 6px; }
+
+    .slide-content.active {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-content::-webkit-scrollbar {
+      width: 5px;
+    }
+    .slide-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .slide-content::-webkit-scrollbar-thumb {
+      background: rgba(129, 178, 154, 0.25);
+      border-radius: 4px;
+    }
+    .slide-content::-webkit-scrollbar-thumb:hover {
+      background: rgba(129, 178, 154, 0.5);
+    }
+
+    /* 標題與排版樣式 */
+    h1.hero-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.35;
+      margin-bottom: 16px;
+    }
+
+    h2.slide-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    p.subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* 溫柔小卡片佈局 */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .card-soft {
+      background: #FAF8F5;
+      border: 1.5px solid var(--border-soft);
+      border-radius: 20px;
+      padding: 22px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .card-soft:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      border-color: rgba(224, 122, 95, 0.3);
+    }
+
+    .card-soft h3 {
+      font-size: 18px;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-soft p, .card-soft li {
+      font-size: 14.5px;
+      color: #555974;
+      line-height: 1.65;
+    }
+
+    .card-soft ul {
+      padding-left: 20px;
+    }
+
+    /* 引述金句框 */
+    .quote-box {
+      background: linear-gradient(135deg, rgba(244, 211, 94, 0.15), rgba(247, 237, 226, 0.4));
+      border-left: 4px solid var(--accent-yellow);
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-style: italic;
+      color: #4A4E69;
+      margin-top: 18px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* 標籤小藥丸 */
+    .pill {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      background: rgba(129, 178, 154, 0.2);
+      color: #2F6F55;
+    }
+
+    /* 底部導覽列 */
+    .deck-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--border-soft);
+    }
+
+    .nav-hints {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .key-cap {
+      background: #F0ECE1;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+      border: 1px solid #D8D2C2;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    button.nav-btn {
+      background: var(--card-bg);
+      border: 2px solid var(--border-soft);
+      color: var(--text-main);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: 22px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    button.nav-btn:hover:not(:disabled) {
+      background: var(--primary-peach);
+      border-color: var(--primary-peach);
+      color: #FFF;
+      transform: scale(1.03);
+    }
+
+    button.nav-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    button.primary-btn {
+      background: var(--primary-peach);
+      border-color: var(--primary-peach);
+      color: #FFF;
+    }
+
+    button.primary-btn:hover:not(:disabled) {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+    }
+
+    /* 特殊感官卡片色彩微調 */
+    .card-sound { border-top: 4px solid #81B29A; }
+    .card-smell { border-top: 4px solid #F4A261; }
+    .card-touch { border-top: 4px solid #E76F51; }
+    .card-taste { border-top: 4px solid #E9C46A; }
+    .card-sight { border-top: 4px solid #A8DADC; }
+
+    @media (max-width: 768px) { .deck-wrapper { padding: 24px; border-radius: 20px; height: auto; min-height: 600px; }
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      h1.hero-title {
+        font-size: 24px;
+      }
+      h2.slide-title {
+        font-size: 20px;
+      }
+    }
+  
+    .header-nav-left, .header-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    a.nav-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+      background: #F0ECE1;
+      text-decoration: none;
+      border: 1px solid #E2DCCB;
+      transition: all 0.2s ease;
+    }
+    a.nav-link-btn:hover {
+      background: var(--primary-peach);
+      color: #FFF;
+      border-color: var(--primary-peach);
+      transform: translateY(-1px);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- 頂部進度條 -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- 簡報主卡片容器 -->
+  <main class="deck-wrapper">
+    
+    <!-- 頁眉標註 -->
+        <header class="deck-header">
+      <div class="header-nav-left">
+        <a href="index.html" class="nav-link-btn" title="返回簡報總覽目錄">🏠 回首頁</a>
+        <div class="tag-badge">
+          <span>🧸 Sensing Their Presence</span>
+        </div>
+      </div>
+      <div class="header-nav-right">
+        <div class="slide-counter" id="slideCounter">Slide 1</div>
+        <a href="06-rivasvidal-2026-eeg-eyetracking-monitoring.html" class="nav-link-btn">下一篇 ➔</a>
+      </div>
+    </header>
+
+    <!-- Slide 1: 封面 -->
+    <section class="slide-content active" data-slide="1">
+      <span class="pill" style="margin-bottom: 12px; background: rgba(224, 122, 95, 0.15); color: var(--primary-peach); font-size: 13px; padding: 4px 12px;">ACM CHI 2023 國際人機互動頂會論文</span>
+      <h1 class="hero-title">就算分開，我也在身邊 🌱<br><span style="color: var(--primary-peach); font-weight: 800;">初顯期成人與父母的「五感」被動相聚學</span></h1>
+      <p class="subtitle">Sensing Their Presence: How Emerging Adults And Their Parents Connect After Moving Apart</p>
+      
+      <div class="card-soft" style="background: linear-gradient(135deg, #FAF8F5, #F7EDE2); border-left: 5px solid var(--primary-peach);">
+        <p style="font-size: 15px; margin-bottom: 8px;"><strong>📚 論文作者：</strong>Hanieh Shakeri, Denise Y. Geiskkovitch, Radhika Garg, Carman Neustaedter</p>
+        <p style="font-size: 15px; margin-bottom: 8px;"><strong>🏫 研究機構：</strong>Simon Fraser University (西門菲莎大學), McMaster, Syracuse</p>
+        <p style="font-size: 14px; color: var(--text-muted);"><strong>💡 本篇核心：</strong>當我們第一次搬出家門獨立生活，科技如何不用「查勤式通話」，光靠家裡的聲音、氣味與痕跡，溫柔地維繫彼此？</p>
+      </div>
+    </section>
+
+    <!-- Slide 2: 長大離家的拉扯 -->
+    <section class="slide-content" data-slide="2">
+      <h2 class="slide-title">🕊️ 長大搬出家門：那份「甜蜜與負擔」</h2>
+      <p class="subtitle">第一次擁有屬於自己的獨立房間與生活，為什麼我們和爸媽的相處反而變緊繃了？</p>
+
+      <div class="grid-2">
+        <div class="card-soft" style="border-top: 4px solid var(--accent-sage);">
+          <h3>🧑‍🎓 初顯期成人的心聲 (18~27歲)</h3>
+          <ul>
+            <li><strong>渴望自由與自主權</strong>：想要自己決定何時出門、何時整理房間，不想事事報備。</li>
+            <li><strong>被訊息轟炸的窒息感</strong>：上課打工忙了一整天，看到家人群組的關心貼文，不讀不回覺得內疚，想回又覺得心力交瘁。</li>
+          </ul>
+        </div>
+
+        <div class="card-soft" style="border-top: 4px solid var(--primary-peach);">
+          <h3>👵 父母的心聲 (39~64歲)</h3>
+          <ul>
+            <li><strong>難以適應的空巢失落</strong>：習慣了孩子每天在眼皮底下，突然家裡變得好安靜。</li>
+            <li><strong>忍不住焦慮恐慌</strong>：傳了訊息一小時沒回，腦海裡就開始上演「是不是生病或出意外了？」的內心小劇場。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="quote-box">
+        💬 <strong>年輕人說：</strong>「我不是不愛他們，只是當我沒在幾小時內回訊息時，那種『讓爸媽擔心的罪惡感』真的讓我很沮喪……」
+      </div>
+    </section>
+
+    <!-- Slide 3: 現有通訊的盲點 -->
+    <section class="slide-content" data-slide="3">
+      <h2 class="slide-title">📱 為什麼「打視訊」和「傳 LINE」還不夠？</h2>
+      <p class="subtitle">科技讓我們能隨時連線，但為什麼常常反而讓我們更累？</p>
+
+      <div class="grid-3">
+        <div class="card-soft">
+          <div style="font-size: 28px; margin-bottom: 8px;">⚡</div>
+          <h3>需要很高的「心力」</h3>
+          <p>視訊通話需要雙方都空出完整時間、整理儀容、坐在鏡頭前，這在作息混亂的大學或出社會階段極難協調。</p>
+        </div>
+
+        <div class="card-soft">
+          <div style="font-size: 28px; margin-bottom: 8px;">👀</div>
+          <h3>像被攝影機監視</h3>
+          <p>常開型視訊（Always-on video）會讓合租室友非常反感，也讓年輕人覺得自己私密的生活隨時在被「直播審查」。</p>
+        </div>
+
+        <div class="card-soft">
+          <div style="font-size: 28px; margin-bottom: 8px;">🍵</div>
+          <h3>缺少「同住的呼吸感」</h3>
+          <p>真正讓我們感到溫暖的，往往不是刻意的問答對話，而是各做各的事、卻知道「你在隔壁」的踏實感。</p>
+        </div>
+      </div>
+
+      <div class="quote-box">
+        💡 <strong>HCI 觀察：</strong>同住時，家人的互動有很大一部分是「被動行為」——聽見你在廚房走動，不用說話，心裡就很安穩。
+      </div>
+    </section>
+
+    <!-- Slide 4: 核心概念：被動共在感 -->
+    <section class="slide-content" data-slide="4">
+      <h2 class="slide-title">🏡 核心概念：什麼是「被動共在感」？</h2>
+      <p class="subtitle">不用打字、不用講電話，如何讓遠方的人感覺「我們在一起」？</p>
+
+      <div class="card-soft" style="background: linear-gradient(135deg, rgba(129, 178, 154, 0.1), rgba(247, 237, 226, 0.6)); border: 2px solid var(--accent-sage); margin-bottom: 18px;">
+        <h3 style="color: #2F6F55; font-size: 20px;">✨ Passive Co-Presence (被動共在感)</h3>
+        <p style="font-size: 15px; margin-top: 6px;">
+          指無論雙方是同處一室還是相隔千里，<strong>無須刻意發起對話或即時互動，僅透過環境背景中的感官線索（聲音、氣味、光影），就能被動感知到彼此的存在與陪伴</strong>。
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card-soft">
+          <h3>❌ 主動連結 (Active Connection)</h3>
+          <p>打電話、傳文字簡訊、視訊會議。<br><strong>代價：</strong>耗費專注力、需要協調作息、帶來「必須回信」的義務負擔。</p>
+        </div>
+        <div class="card-soft">
+          <h3>🌿 被動連結 (Passive Connection)</h3>
+          <p>背景傳來熟悉的廚房煎蛋聲、聞到媽媽同款香氣。<br><strong>價值：</strong>零溝通壓力、保留各自空間，卻能獲得深層安心感。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: 研究方法：如何探索五感 -->
+    <section class="slide-content" data-slide="5">
+      <h2 class="slide-title">🔍 研究怎麼做？16 對親子的協同設計</h2>
+      <p class="subtitle">研究團隊沒有直接寫 code，而是先走進家庭，深度挖掘人類的五種感官記憶。</p>
+
+      <div class="grid-3">
+        <div class="card-soft">
+          <span class="pill">階段一</span>
+          <h3>1 對 1 個別深度訪談</h3>
+          <p>分開採訪 16 位長輩與 16 位年輕人（共 32 人），讓大家暢所欲言，不用擔心爸媽在旁邊不好意思講真心話。</p>
+        </div>
+
+        <div class="card-soft">
+          <span class="pill">階段二</span>
+          <h3>5 天「五感」居家札記</h3>
+          <p>每天專注一個感官（聽、視、嗅、觸、味），寫下「同住時的記憶」、「現在分居的感受」與「未來的假想點子」。</p>
+        </div>
+
+        <div class="card-soft">
+          <span class="pill">階段三</span>
+          <h3>8 場推測性設計工作坊</h3>
+          <p>年輕人一組、父母一組，各自腦洞大開繪製未來科技草圖，最後再讓親子交叉討論優缺點！</p>
+        </div>
+      </div>
+
+      <div class="quote-box" style="margin-top: 18px;">
+        📊 <strong>驚人產出：</strong>短短幾天內收集了 345 則手寫心得、110 張生活照片、19 支環境錄音與 6 段生活短片！
+      </div>
+    </section>
+
+    <!-- Slide 6: 聽覺篇 -->
+    <section class="slide-content" data-slide="6">
+      <h2 class="slide-title">👂 聽覺：藏在生活背景裡的「日常音景」</h2>
+      <p class="subtitle">家裡最讓人安心的聲音，往往是那些我們平時不會注意的微小動靜。</p>
+
+      <div class="grid-2">
+        <div class="card-soft card-sound">
+          <h3>🍳 那些被懷念的聲音</h3>
+          <ul>
+            <li><strong>廚房的備料聲</strong>：切菜聲、鍋鏟碰撞聲、烤箱叮一聲，代表家裡有人在為自己張羅。</li>
+            <li><strong>走動與鍵盤打字聲</strong>：隔著門聽見對方的腳步聲，就知道他平安無事。</li>
+          </ul>
+        </div>
+
+        <div class="card-soft card-sound">
+          <h3>🌿 參與者的設計奇思</h3>
+          <ul>
+            <li><strong>《虛擬同步散步》</strong>：雙方不用講電話，把各自散步時聽見的「海風聲、踩樹葉聲、鳥叫聲」混合成一首專屬背景音。</li>
+            <li><strong>隱私安全界線</strong>：絕對不能 24 小時無死角直播聲音！必須只分享經過模糊處理的音景。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="quote-box">
+        💬 <strong>女兒 EA8 說：</strong>「如果可以一邊散步，一邊聽見我散步的風聲跟爸爸那邊的鳥叫聲混在一起，即使不講話，我也覺得正陪著他。」
+      </div>
+    </section>
+
+    <!-- Slide 7: 嗅覺與味覺篇 -->
+    <section class="slide-content" data-slide="7">
+      <h2 class="slide-title">👃 嗅覺與 👅 味覺：最強大的「情感時光機」</h2>
+      <p class="subtitle">嗅覺神經直通大腦情感中樞，一道味道能一秒帶你回到兒時餐桌。</p>
+
+      <div class="grid-2">
+        <div class="card-soft card-smell">
+          <h3>🌸 嗅覺：家裡獨一無二的氣味景觀</h3>
+          <p><strong>最熱烈的感官！</strong> 每個人家裡都有特殊的「媽媽味道」、剛洗好衣服的香味、深夜烤餅乾的甜味。</p>
+          <ul style="margin-top: 8px;">
+            <li><strong>設計點子：</strong>在牆上安裝氣味擴香裝置，當父母烤點心時，遠方子女的房間會散發淡淡的肉桂香。</li>
+          </ul>
+        </div>
+
+        <div class="card-soft card-taste">
+          <h3>🍲 味覺：傳承烹飪與跨越空間共餐</h3>
+          <p>許多剛搬出去的年輕人是第一次自己下廚，媽媽的「家常食譜」成了最強的情感紐帶。</p>
+          <ul style="margin-top: 8px;">
+            <li><strong>設計點子：</strong>《同步廚房鏡像》，在流理台前投影媽媽切菜的動作，像小時候一樣並肩做飯。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="quote-box">
+        💬 <strong>媽媽 P6 回憶：</strong>「深夜烤布朗尼的香味總會把女兒引到廚房聊聊天。現在聞到甜點香，我就會好想傳個簡訊問她好不好。」
+      </div>
+    </section>
+
+    <!-- Slide 8: 觸覺與視覺篇 -->
+    <section class="slide-content" data-slide="8">
+      <h2 class="slide-title">🖐️ 觸覺與 👁️ 視覺：抱抱泰迪熊與留下來的椅子</h2>
+      <p class="subtitle">即使雙手碰不到對方，我們依然可以透過「實體物品」寄託撫慰。</p>
+
+      <div class="grid-2">
+        <div class="card-soft card-touch">
+          <h3>🧸 代理觸摸 (Touch-by-Proxy)</h3>
+          <ul>
+            <li><strong>撫慰感無可取代</strong>：遇到難過的事，最想念媽媽的擁抱與摸摸頭。</li>
+            <li><strong>實體代理物品</strong>：抱著印有家裡狗狗照片的抱枕、穿上媽媽織的舊毛衣，創造一種「擬似擁抱（Pseudo-hug）」。</li>
+            <li><strong>觸覺衣考驗</strong>：設計未來的遠距觸覺手套或衣服時，必須有明確的「同意機制（Consent）」，避免壓力。</li>
+          </ul>
+        </div>
+
+        <div class="card-soft card-sight">
+          <h3>🪑 生活痕跡 (Traces Left Behind)</h3>
+          <ul>
+            <li><strong>留下來的舊物</strong>：孩子搬走了，房間依然維持原樣；看見女兒以前總是不關緊的櫥櫃門，心裡就暖暖的。</li>
+            <li><strong>帶走的小家具</strong>：把家裡的舊餐椅搬到合租公寓，那張椅子就代表了「家的延伸」。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="quote-box">
+        💡 <strong>HCI 發現：</strong>不一定需要昂貴的數位顯示器，日常中帶著記憶的普通老物件，就是最好的情感介面！
+      </div>
+    </section>
+
+    <!-- Slide 9: 音樂混音隱喻 -->
+    <section class="slide-content" data-slide="9">
+      <h2 class="slide-title">🎶 驚豔的設計隱喻：「像音樂混音一樣」</h2>
+      <p class="subtitle">未來的科技該如何營造相聚感？論文提出了一個極具詩意的想像：Musical Mashup！</p>
+
+      <div class="card-soft" style="background: linear-gradient(135deg, rgba(244, 162, 97, 0.1), rgba(244, 211, 94, 0.2)); border: 2px dashed var(--primary-peach); margin-bottom: 20px;">
+        <h3 style="color: var(--primary-peach);">🎧 什麼是「生活氛圍的音樂混音」？</h3>
+        <p style="font-size: 15px; margin-top: 6px;">
+          音樂製作人不會把整首未經處理的原聲全部放出來，而是擷取吉他節奏、人聲短音，組合成和諧的新歌曲。<br>
+          <strong>科技也一樣！我們不需要 24 小時直播孩子的房間，而是將零碎的「微弱水聲、間歇香氣、暖光微動」優雅交織，呈現抽象的在場感。</strong>
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card-soft">
+          <h3>1. 時間非同步</h3>
+          <p>不用在同一秒發生。下午做飯的香氣，可以在孩子晚上回家開門時緩緩釋放。</p>
+        </div>
+        <div class="card-soft">
+          <h3>2. 充分抽象化</h3>
+          <p>看見光線微微閃爍代表有人走動，而不是拍下他穿著睡衣吃泡麵的樣子。</p>
+        </div>
+        <div class="card-soft">
+          <h3>3. 消除被監視感</h3>
+          <p>保護了室友與年輕人的隱私，同時安撫了父母對孩子安好的掛念。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: 設計師的三個溫柔守則 -->
+    <section class="slide-content" data-slide="10">
+      <h2 class="slide-title">📐 設計師的 3 個溫柔守則 (Design Guidelines)</h2>
+      <p class="subtitle">這篇 CHI 論文留給未來所有科技研發者、介面設計師的實戰啟發：</p>
+
+      <div class="grid-3">
+        <div class="card-soft" style="border-top: 4px solid var(--accent-sage);">
+          <div style="font-size: 24px; margin-bottom: 6px;">🚪</div>
+          <h3>守則一：尊重合租界線</h3>
+          <p>許多年輕人是跟室友分租！<strong>公共區域（客廳、衛浴）絕對不能安裝感測器</strong>，否則會侵犯室友隱私，只能安裝在個人臥室。</p>
+        </div>
+
+        <div class="card-soft" style="border-top: 4px solid var(--primary-peach);">
+          <div style="font-size: 24px; margin-bottom: 6px;">✨</div>
+          <h3>守則二：製造偶發的驚喜</h3>
+          <p>過於頻繁的通知會讓人麻木甚至反感。<strong>適度加入「出乎意料（Serendipity）」的微小線索</strong>，更能自然喚起對家的思念。</p>
+        </div>
+
+        <div class="card-soft" style="border-top: 4px solid var(--accent-yellow);">
+          <div style="font-size: 24px; margin-bottom: 6px;">🛡️</div>
+          <h3>守則三：防止科技變監控</h3>
+          <p>必須嚴格防範這類工具淪為直升機父母（Helicopter Parents）查勤孩子幾點睡覺、有沒有朋友來訪的「監視器」。</p>
+        </div>
+      </div>
+
+      <div class="quote-box" style="margin-top: 18px;">
+        💡 <strong>評估準則：</strong>科技應該「賦予年輕人自主掌控權（Control & Agency）」，由孩子決定分享什麼，而不是單向被動被窺探。
+      </div>
+    </section>
+
+    <!-- Slide 11: 結語與反思 -->
+    <section class="slide-content" data-slide="11">
+      <h2 class="slide-title">🌱 結語：長大，是一場溫柔的目送</h2>
+      <p class="subtitle">人機互動（HCI）的最高境界，是讓科技學會體貼與尊重。</p>
+
+      <div class="card-soft" style="background: linear-gradient(135deg, #FAF8F5, #F7EDE2); padding: 28px; text-align: center; border-radius: 24px; margin-bottom: 20px;">
+        <p style="font-size: 19px; line-height: 1.8; color: var(--text-main); font-weight: 600;">
+          「科技的價值，不在於把兩個人隨時綁在一起，<br>
+          而是讓深愛彼此的人，在各自奔赴獨立生活的世界裡，<br>
+          <span style="color: var(--primary-peach); font-weight: 800;">依然能以最舒服、無壓力的姿態，感知對方的存在。</span>」
+        </p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card-soft">
+          <h3>📌 一句話帶走的收穫 (Takeaway)</h3>
+          <p>被動共在感提醒我們：人與人的連結除了語言文字，還有周遭環境的五感溫度。未來的 AI 與智慧家庭，應該學會「安靜地陪伴」。</p>
+        </div>
+
+        <div class="card-soft">
+          <h3>🎯 延伸思考問題</h3>
+          <p>如果你現在要為你跟父母設計一個小裝置，你會選擇分享哪一種感官？是早晨的第一杯咖啡香，還是傍晚回家的關門聲？</p>
+        </div>
+      </div>
+    <div style="text-align: center; margin-top: 14px;"><a href="06-rivasvidal-2026-eeg-eyetracking-monitoring.html" class="open-deck-btn" style="display: inline-flex; background: var(--primary-peach); color: #fff; text-decoration: none; padding: 10px 22px; border-radius: 20px; font-weight: 700; font-size: 14px; box-shadow: var(--shadow-soft);">下一篇：EEG+眼動 認知狀態監測 ➔</a></div>
+    </section>
+
+    <!-- 底部導覽列 -->
+    <footer class="deck-footer">
+      <div class="nav-hints">
+        <span>提示：可用鍵盤</span>
+        <span class="key-cap">←</span>
+        <span class="key-cap">→</span>
+        <span>或點擊按鈕切換投影片</span>
+      </div>
+      <div class="btn-group">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← 上一頁</button>
+        <button class="nav-btn primary-btn" id="nextBtn" onclick="changeSlide(1)">下一頁 →</button>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = document.querySelectorAll(".slide-content").length;
+
+    function updateSlide() {
+      // 隱藏所有頁面
+      document.querySelectorAll('.slide-content').forEach(slide => {
+        slide.classList.remove('active');
+      });
+
+      // 顯示當前頁面
+      const activeSlide = document.querySelector(`.slide-content[data-slide="${currentSlide}"]`);
+      if (activeSlide) {
+        activeSlide.classList.add('active');
+      }
+
+      // 更新頁碼指示
+      document.getElementById('slideCounter').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+
+      // 更新頂部進度條
+      const progressPercent = (currentSlide / totalSlides) * 100;
+      document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+      // 更新按鈕狀態
+      document.getElementById('prevBtn').disabled = (currentSlide === 1);
+      
+      const nextBtn = document.getElementById('nextBtn');
+      if (currentSlide === totalSlides) {
+        nextBtn.textContent = '回到第一頁 ↺';
+      } else {
+        nextBtn.textContent = '下一頁 →';
+      }
+    }
+
+    function changeSlide(direction) {
+      if (currentSlide === totalSlides && direction === 1) {
+        currentSlide = 1;
+      } else {
+        currentSlide += direction;
+        if (currentSlide < 1) currentSlide = 1;
+        if (currentSlide > totalSlides) currentSlide = totalSlides;
+      }
+      updateSlide();
+    }
+
+    // 鍵盤左右鍵監聽
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        changeSlide(-1);
+      }
+    });
+
+    // 初始化
+    updateSlide();
+  </script>
+</body>
+</html>
